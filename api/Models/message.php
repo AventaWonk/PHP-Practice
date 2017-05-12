@@ -1,9 +1,10 @@
 <?php
-
+	include './library/model.php';
+	
 	/**
 	* Message model
 	*/
-	class Message
+	class Message extends Model
 	{
 		public $id;
 		public $text;
