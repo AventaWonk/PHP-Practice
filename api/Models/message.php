@@ -1,6 +1,6 @@
 <?php
 	include './library/model.php';
-	
+
 	/**
 	* Message model
 	*/
@@ -10,8 +10,7 @@
 		public $text;
 
 		function __construct($text = "") {
-	    	$this->id = uniqid("", true); 
-	    	$this->text = $text;
+			$this->id = uniqid("", true); 
+			$this->text = $text;
 		}
 	}
-	

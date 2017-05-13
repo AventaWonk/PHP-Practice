@@ -18,6 +18,7 @@
 			}
 			return $args;
 		}
+
 		private static function getRecivedParams($arguments) {
 			$params = [];
 			foreach ($arguments as $value) {
@@ -31,6 +32,19 @@
 
 		public static function start() {
 			try {
+		//     $method = $_SERVER['REQUEST_METHOD'];
+    //     switch ($method) {
+    //     	case 'GET':
+        		
+    //     		break;
+    //     	case 'POST':
+        		
+    //     		break;
+    //     	default:
+    //     			throw new Exception("Unexpected Header");
+    //     		break;
+    //     }
+
 				$pieces = explode('.', $_GET['method']);
 
 				$className = mb_convert_case($pieces[0], MB_CASE_TITLE) . "Controller";
@@ -47,7 +61,7 @@
 				Response::send($result);
 
 			} catch (Exception $e) {
-			    echo $e->getMessage();
+			  Response::send($e);
 			}
 		}
 	}

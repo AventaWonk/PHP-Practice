@@ -3,43 +3,33 @@
 	/**
 	* 
 	*/
-	class ResponseWrapper
-	{
-		public $response;
-		
-		function __construct($object)
-		{
-			$this->response = $object;
-		}
-	}
-
-	/**
-	* 
-	*/
 	class ResponseSuccess
 	{
-		public $code;
-		public $body;
-
-		function __construct($body, $code = 1) {
-			$this->body = $body;
-			$this->code = $code;
-		}
-
-		public function get() {
-			if($this->body) {
-				return new ResponseWrapper($this->body);
+		public static function get($object) {
+			if($object != null) {
+				return [
+					'response' => $object
+				];
 			}
-			return new ResponseWrapper($this->code);
+			return [
+				'code' => 1
+			];
 		}
 	}
 
 	/**
 	* 
 	*/
-	class ReponseError
+	class ResponseError
 	{
-		
+		public static function get($message, $code = 0) {
+			return [
+				'error' => [
+					'code' => $code,
+					'message' => $message
+				]
+			];
+		}
 	}
 
 	/**
@@ -47,21 +37,16 @@
 	*/
 	class Response
 	{
-		private static function success() {
-					
-		}
-
-		private static function failed() {
-			
-		}
-
 		public static function send($object) {
 			header("Access-Control-Allow-Orgin: *");
 			header("Access-Control-Allow-Methods: *");
 			header("Content-Type: application/json");
 
-			$response = new ResponseSuccess($object);
-			echo json_encode( $response->get() );
+			if(gettype($object) == 'object' && get_class($object) == "Exception") {
+				$response = ResponseError::get($object->getMessage()) ;
+			} else {
+				$response = ResponseSuccess::get($object);
+			}	
+			echo json_encode($response);
 		}
 	}
-	
