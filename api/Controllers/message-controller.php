@@ -2,35 +2,40 @@
 	include './library/controller.php';
 	include './Models/message.php';
 
+
 	/**
 	* Message controller
 	*/
 	class MessageController extends Controller
 	{
 		public function add($text) {
-			$message = new Message($text);
 			try {  
-				$dbh = new PDO('mysql:host=localhost;dbname=api_test', 'root'); // will be moved
-				$sth = $dbh->prepare("INSERT INTO messages (id, text) values (:id, :text)");  
-				$sth->execute((array) $message);
+				Message::add(new Message($text));
 			} catch (Exception $e) {
-				 
-			}
-			
+				return $e; 
+			}		
 		}
 
-		public function get(){
-			$messages = [];
+		public function get() {
 			try {  
-				$dbh = new PDO('mysql:host=localhost;dbname=api_test', 'root'); // will be moved
-				$sth = $dbh->query('SELECT id, text from messages');  
-				$sth->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'Message');  
-				while($obj = $sth->fetch()) {  
-				    $messages[] = $obj;  
-				}
+				$messages = Message::findAll();
 			} catch (Exception $e) {
-				
+				return $e;
 			}
 			return $messages;
+		}
+
+		public function delete($id) {
+			try {  
+				$message = new Message();
+				$message->text = null;
+				$message->id = $id;
+
+				$message = Message::find($message);
+				return $message->text;
+				//$message->delete();
+			} catch (Exception $e) {
+				return $e;
+			}
 		}
 	}

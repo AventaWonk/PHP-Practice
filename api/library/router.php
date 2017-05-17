@@ -5,59 +5,63 @@
 	* Router class
 	*/
   class Router
-	{
-		private static function getFunctionArgs($class, $method) {
-			$args = [];
-			if(method_exists($class, $method)) {
-				$ReflectionMethod =  new ReflectionMethod($class, $method);
-				foreach( $ReflectionMethod->getParameters() as $param) {
-		      $args[] = $param->name;
-		    }
-			} else {
-				throw new Exception("Error: Processing Request", 1);
-			}
-			return $args;
-		}
-
-		private static function getRecivedParams($arguments) {
-			$params = [];
-			foreach ($arguments as $value) {
-				if(!isset($_GET[$value])){
-					throw new Exception("Error: hasnt all params", 1);
-				}
-				$params[] = $_GET[$value];
-			}
-			return $params;
-		}
+	{	
+	  const GET = "GET";
+		const POST = "POST";
 
 		public static function start() {
-			try {
-		//     $method = $_SERVER['REQUEST_METHOD'];
-    //     switch ($method) {
-    //     	case 'GET':
-        		
-    //     		break;
-    //     	case 'POST':
-        		
-    //     		break;
-    //     	default:
-    //     			throw new Exception("Unexpected Header");
-    //     		break;
-    //     }
+			try {  
+				$params = [];
+				$method;
+				$class_name;
+				$method_name;
+				$file_name;
+				$args = [];
 
-				$pieces = explode('.', $_GET['method']);
+				$method = $_SERVER['REQUEST_METHOD'];
+				if($method == self::GET) {
+					$pieces = explode('.', $_GET['method']);
+				} else {
+					$pieces = explode('.', $_POST['method']);
+				}
+				$class_name = mb_convert_case($pieces[0], MB_CASE_TITLE) . "Controller";
+				$method_name = $pieces[1];
+				$file_name = "Controllers/" . $pieces[0] . "-controller.php";
 
-				$className = mb_convert_case($pieces[0], MB_CASE_TITLE) . "Controller";
-				$methodName = $pieces[1];
-				$fileName = "Controllers/" . $pieces[0] . "-controller.php";
-
-				include($fileName);
-				$arguments = self::getFunctionArgs($className, $methodName);
-				$params = self::getRecivedParams($arguments);
+				if (file_exists($file_name)) {
+					include($file_name);
+				} else {
+					throw new Exception("Hasnt method", 1);
+				}
 				
-				$controller = new $className();
-				$result = $controller->$methodName(...$params);
-			
+				if(method_exists($class_name, $method_name)) {
+
+					$ReflectionMethod =  new ReflectionMethod($class_name, $method_name);
+					foreach( $ReflectionMethod->getParameters() as $param) {
+			      $args[] = $param->name;
+			    }
+				} else {
+					throw new Exception("Error: Processing Request", 1);
+				}
+
+				if($method == self::GET) {
+					foreach ($args as $value) {
+						if(!isset($_GET[$value])){
+							throw new Exception("Error: hasnt all params", 1);
+						}
+						$params[] = $_GET[$value];
+					}
+				} else {
+					foreach ($args as $value) {
+						if(!isset($_POST[$value])){
+							throw new Exception("Error: hasnt all params", 1);
+						}
+						$params[] = $_POST[$value];
+					}
+				}
+				
+				$controller = new $class_name();
+				$result = $controller->$method_name(...$params);
 				Response::send($result);
 
 			} catch (Exception $e) {
