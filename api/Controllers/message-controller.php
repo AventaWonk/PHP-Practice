@@ -32,7 +32,10 @@
 				$message->id = $id;
 
 				$message = Message::find($message);
-				return $message->text;
+				echo $message->text;
+				$message->text = "TEST";
+				$message->save();
+				// return $message->text;
 				//$message->delete();
 			} catch (Exception $e) {
 				return $e;
