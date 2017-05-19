@@ -1,4 +1,5 @@
 <?php
+
   /**
   * SQL generator for PDO
   */
@@ -32,9 +33,35 @@
         }
         $i++;
       }
-      
+
       return [
         "query" => sprintf(self::SELECT, $params, $model->getTableName(), $whereString),
+        "availibleParams" => $availibleParams,
+      ];
+    }
+
+    protected static function generateDelete($model) {
+      $availibleParams = [];
+      $whereString = "";
+
+      $i = 0;
+      foreach ($model as $key => $name) {
+        if($i == 0) {
+          if($name) {
+            $availibleParams[$key] = $name;
+            $whereString .= $key . " = :" . $key;
+          }
+        } else {
+          if($name) {
+            $availibleParams[$key] = $name;
+            $whereString .= " AND " . $key . " = :" . $key;
+          }
+        }
+        $i++;
+      }
+      
+      return [
+        "query" => sprintf(self::DELETE, $model->getTableName(), $whereString),
         "availibleParams" => $availibleParams,
       ];
     }

@@ -2,7 +2,6 @@
 	include './library/controller.php';
 	include './Models/message.php';
 
-
 	/**
 	* Message controller
 	*/
