@@ -68,7 +68,10 @@
     }
 
     public function delete() {
-      
+      $dbh = new PDO('mysql:host=localhost;dbname=api_test', 'root'); 
+      $sql = SQLGenerator::generateQuery(SQLGenerator::DELETE, $this);
+      $sth = $dbh->prepare($sql["query"]);
+      $sth->execute($sql["availibleParams"]);
+      $dbh = null;
     }
   }
-  
