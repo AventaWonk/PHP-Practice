@@ -32,7 +32,7 @@
         }
         $i++;
       }
-
+      
       return [
         "query" => sprintf(self::SELECT, $params, $model->getTableName(), $whereString),
         "availibleParams" => $availibleParams,
@@ -59,39 +59,37 @@
       $setString = "";
 
       $i = 0;
-      foreach ($previousModel as $key => $name) {
+      foreach ($newModel as $key => $name) {
         if($i == 0) {
-          $params = $key;
-          $whereString = $key . " = '" . $name . "'";
           if($name) {
-            $availibleParams[$key] = $name;
-            $whereString = $key . " = '" . $name . "'";
+            $availibleParams["new_" . $key] = $name;
+            $setString .= $key . " = :new_" . $key;
           }
         } else {
-          $params .= ", " . $key;
           if($name) {
-            $availibleParams[$key] = $name . "'";
-            $whereString .= " AND " . $key . " = '" . $name . "'";
+            $availibleParams["new_" . $key] = $name;
+            $setString .= ", " . $key . " = :new_" . $key;
           }
         }
         $i++;
       }
 
       $i = 0;
-      foreach ($newModel as $key => $name) {
+      foreach ($previousModel as $key => $name) {
         if($i == 0) {
-          // $setString = $key . " = :" . $name;
           if($name) {
-            $setString = $key . " = '" . $name . "'";
+            $availibleParams[$key] = $name;
+            $whereString .= $key . " = :" . $key;
           }
         } else {
           if($name) {
-            $setString .= ", " . $key . " = '" . $name . "'";
+            $availibleParams[$key] = $name;
+            $whereString .= " AND " . $key . " = :" . $key;
           }
         }
         $i++;
       }
-      echo sprintf(self::UPDATE, $newModel->getTableName(), $setString, $whereString);
+
       return [
         "query" => sprintf(self::UPDATE, $newModel->getTableName(), $setString, $whereString),
         "availibleParams" => $availibleParams,

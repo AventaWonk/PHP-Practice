@@ -25,6 +25,20 @@
 			return $messages;
 		}
 
+		public function changeText($id, $newText) {
+			try {  
+				$message = new Message();
+				$message->text = null;
+				$message->id = $id;
+
+				$message = Message::find($message);
+				$message->text = $newText;
+				$message->save();
+			} catch (Exception $e) {
+				return $e;
+			}
+		}
+
 		public function delete($id) {
 			try {  
 				$message = new Message();
@@ -32,11 +46,7 @@
 				$message->id = $id;
 
 				$message = Message::find($message);
-				echo $message->text;
-				$message->text = "TEST";
-				$message->save();
-				// return $message->text;
-				//$message->delete();
+				$message->delete();
 			} catch (Exception $e) {
 				return $e;
 			}

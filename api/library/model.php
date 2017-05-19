@@ -59,12 +59,9 @@
       if(self::$lastModel){
         $dbh = new PDO('mysql:host=localhost;dbname=api_test', 'root'); 
         $sql = SQLGenerator::generateQuery(SQLGenerator::UPDATE, $this, self::$lastModel);
-        $sth = $dbh->query($sql["query"]); 
-        // $sth = $dbh->prepare($sql["query"]);  
-        // $sth->execute((array) $this);
+        $sth = $dbh->prepare($sql["query"]);
+        $sth->execute($sql["availibleParams"]);
         $dbh = null;
-        
-        //echo $sql["query"];
       } else {
         throw new Exception("Error", 1);
       }
