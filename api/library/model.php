@@ -14,7 +14,11 @@
     }
 
     public static function add($model) {
-      
+      $dbh = new PDO('mysql:host=localhost;dbname=api_test', 'root'); 
+      $sql = SQLGenerator::generateQuery(SQLGenerator::INSERT, $model);
+      $sth = $dbh->prepare($sql["query"]);  
+      $sth->execute((array) $sql["availibleParams"]);
+      $dbh = null
     }
 
     public static function find($model) {
