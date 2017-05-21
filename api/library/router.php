@@ -35,7 +35,6 @@
 				}
 				
 				if(method_exists($class_name, $method_name)) {
-
 					$ReflectionMethod =  new ReflectionMethod($class_name, $method_name);
 					foreach( $ReflectionMethod->getParameters() as $param) {
 			      $args[] = $param->name;

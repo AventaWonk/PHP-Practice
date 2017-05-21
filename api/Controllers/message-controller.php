@@ -9,7 +9,8 @@
 	{
 		public function add($text) {
 			try {  
-				Message::add(new Message($text));
+				$message = new Message($text);
+				Message::add($message);
 			} catch (Exception $e) {
 				return $e; 
 			}		
@@ -39,13 +40,19 @@
 		}
 
 		public function delete($id) {
-			try {  
+			try {
 				$message = new Message();
+				$message2 = new Message();
 				$message->text = null;
-				$message->id = $id;
+				$message->id ="591608940d2791.33594588";
+				$message2->text = null;
+				$message2->id = "5919a0333ca557.93892933";
 
 				$message = Message::find($message);
-				$message->delete();
+				$message2 = Message::find($message2);
+				$message->text = "DOMDOMDOM";
+				$message->save();
+				// $message->delete();
 			} catch (Exception $e) {
 				return $e;
 			}

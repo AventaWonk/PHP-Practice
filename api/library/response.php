@@ -6,7 +6,7 @@
 	class ResponseSuccess
 	{
 		public static function get($object) {
-			if($object != null) {
+			if(isset($object)) {
 				return [
 					'response' => $object
 				];

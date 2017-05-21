@@ -6,17 +6,15 @@
   */
   class Model
   {
-    private static $lastModel;
+    private $modelId = null;
+    private static $findedModels;
 
     public static function getTableName(){
       return mb_convert_case(get_called_class(), MB_CASE_LOWER) . "s";
     }
 
     public static function add($model) {
-      // $dbh = new PDO('mysql:host=localhost;dbname=api_test', 'root'); 
-      // $sth = $dbh->prepare(self::generateSQL($model, self::INSERT));  
-      // $sth->execute((array) $model);
-      // $dbh = null;
+      
     }
 
     public static function find($model) {
@@ -25,21 +23,12 @@
       $sth = $dbh->prepare($sql["query"]);
       $sth->execute($sql["availibleParams"]);
       $sth->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_called_class());  
-      self::$lastModel = $sth->fetch();
-      return clone self::$lastModel;
-    }
-
-    public static function findSeveral($model) {
-      // $rows = [];
-      // $dbh = new PDO('mysql:host=localhost;dbname=api_test', 'root');
-      // $sth = $dbh->prepare(self::generateSelect($model));  
-      // $sth->execute((array) $model);
-      // $sth->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, self::getModelName());  
-      // while($obj = $sth->fetch()) {  
-      //     $rows[] = $obj;  
-      // }
-      // $dbh = null;
-      // return $rows;
+      $findedModel = $sth->fetch();
+      $uid = uniqid("", true);
+      $findedModel->modelId = $uid;
+      self::$findedModels[$uid] = $findedModel;
+      $dbh = null;
+      return clone $findedModel;
     }
 
     public static function findAll() {
@@ -56,8 +45,9 @@
     }
 
     public function save() {
-      if(self::$lastModel){
+      if(self::$findedModels[$this->model_id]) {
         $dbh = new PDO('mysql:host=localhost;dbname=api_test', 'root'); 
+        self::$lastModel = self::$findedModels[$this->model_id];
         $sql = SQLGenerator::generateQuery(SQLGenerator::UPDATE, $this, self::$lastModel);
         $sth = $dbh->prepare($sql["query"]);
         $sth->execute($sql["availibleParams"]);
@@ -74,4 +64,10 @@
       $sth->execute($sql["availibleParams"]);
       $dbh = null;
     }
+    
+    function __destruct() {
+       // if($this->model_id) {
+       //  unset(self::$findedModels[$this->model_id]);
+       // }
+   }
   }

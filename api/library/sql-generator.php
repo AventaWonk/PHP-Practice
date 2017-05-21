@@ -11,6 +11,33 @@
     const UPDATE = "UPDATE %s SET %s WHERE %s";
     const DELETE = "DELETE FROM %s WHERE %s";
 
+    protected static function generateInsert($model) {
+      $availibleParams = [];
+      $params = "";
+      $values = "";
+
+      $i = 0;
+      foreach ($model as $key => $name) {
+        $availibleParams[$key] = $name;
+        if($i == 0) {
+          $params .= $key;
+          $values .= ":" . $key;
+        } else {
+          $params .= ", " . $key;
+          $values .= ", :" . $key;
+        }
+        $i++;
+      }
+
+      $params = "(" . $params . ")";
+      $values = "(" . $values . ")";
+
+      return [
+        "query" => sprintf(self::INSERT, $model->getTableName(), $params, $values),
+        "availibleParams" => $availibleParams,
+      ];
+    }
+
     protected static function generateSelect($model) {
       $availibleParams = [];
       $whereString = "";
@@ -124,10 +151,9 @@
     }
 
     public static function generateQuery($query, $model, $previousModel = 0) {
-
       switch ($query) {
         case self::INSERT:
-          return self::generateSelect($model);
+          return self::generateInsert($model);
           break;
         
         case self::SELECT:
