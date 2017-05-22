@@ -42,17 +42,11 @@
 		public function delete($id) {
 			try {
 				$message = new Message();
-				$message2 = new Message();
+				$message->id = $id;
 				$message->text = null;
-				$message->id ="591608940d2791.33594588";
-				$message2->text = null;
-				$message2->id = "5919a0333ca557.93892933";
 
 				$message = Message::find($message);
-				$message2 = Message::find($message2);
-				$message->text = "DOMDOMDOM";
-				$message->save();
-				// $message->delete();
+				$message->delete();
 			} catch (Exception $e) {
 				return $e;
 			}

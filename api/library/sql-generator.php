@@ -96,7 +96,7 @@
     protected static function generateSelectAll($model) {
       $i = 0;
       $model2 = get_class_vars($model);
-      foreach ($model2 as $key => $name) {
+      foreach ($model2 as $key => $value) {
         if($i == 0) {
           $columns = $key;
         } else {
@@ -104,7 +104,10 @@
         }
         $i++;
       }
-      return sprintf(self::SELECT_ALL, $columns, mb_convert_case($model, MB_CASE_LOWER) . "s");
+
+      return [
+        "query" => sprintf(self::SELECT_ALL, $columns, mb_convert_case($model, MB_CASE_LOWER) . "s"),
+      ];
     }
 
      protected static function generateUpdate($newModel, $previousModel) {

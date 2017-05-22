@@ -1,5 +1,6 @@
 <?php
-  include 'library/router.php';	
+  include 'library/router.php';
+  include 'settings.php'; 
 // $time_start = microtime(true);
 
   if(isset($_GET['method'])) {
