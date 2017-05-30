@@ -34,7 +34,7 @@
 
       return [
         "query" => sprintf(self::INSERT, $model->getTableName(), $params, $values),
-        "availibleParams" => $availibleParams,
+        "params" => $availibleParams,
       ];
     }
 
@@ -63,7 +63,7 @@
 
       return [
         "query" => sprintf(self::SELECT, $params, $model->getTableName(), $whereString),
-        "availibleParams" => $availibleParams,
+        "params" => $availibleParams,
       ];
     }
 
@@ -89,7 +89,7 @@
       
       return [
         "query" => sprintf(self::DELETE, $model->getTableName(), $whereString),
-        "availibleParams" => $availibleParams,
+        "params" => $availibleParams,
       ];
     }
 
@@ -149,7 +149,7 @@
 
       return [
         "query" => sprintf(self::UPDATE, $newModel->getTableName(), $setString, $whereString),
-        "availibleParams" => $availibleParams,
+        "params" => $availibleParams,
       ];
     }
 

@@ -17,7 +17,7 @@
       $dbh = new PDO(...Settings::get()); 
       $sql = SQLGenerator::generateQuery(SQLGenerator::INSERT, $model);
       $sth = $dbh->prepare($sql["query"]);  
-      $sth->execute((array) $sql["availibleParams"]);
+      $sth->execute($sql["params"]);
       $dbh = null;
     }
 
@@ -25,7 +25,7 @@
       $dbh = new PDO(...Settings::get());
       $sql = SQLGenerator::generateQuery(SQLGenerator::SELECT, $model);
       $sth = $dbh->prepare($sql["query"]);
-      $sth->execute($sql["availibleParams"]);
+      $sth->execute($sql["params"]);
       $sth->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, get_called_class());  
       $foundModel = $sth->fetch();
       if($foundModel) {
@@ -54,12 +54,11 @@
     }
 
     public function save() {
-      if(self::$foundModels[$this->model_id]) {
+      if(self::$foundModels[$this->modelId]) {
         $dbh = new PDO(...Settings::get()); 
-        self::$lastModel = self::$foundModels[$this->model_id];
-        $sql = SQLGenerator::generateQuery(SQLGenerator::UPDATE, $this, self::$lastModel);
+        $sql = SQLGenerator::generateQuery(SQLGenerator::UPDATE, $this, self::$foundModels[$this->modelId]);
         $sth = $dbh->prepare($sql["query"]);
-        $sth->execute($sql["availibleParams"]);
+        $sth->execute($sql["params"]);
         $dbh = null;
       } else {
         throw new Exception("Model was not found", 1);
@@ -70,7 +69,7 @@
       $dbh = new PDO(...Settings::get()); 
       $sql = SQLGenerator::generateQuery(SQLGenerator::DELETE, $this);
       $sth = $dbh->prepare($sql["query"]);
-      $sth->execute($sql["availibleParams"]);
+      $sth->execute($sql["params"]);
       $dbh = null;
     }
     

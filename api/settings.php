@@ -3,7 +3,7 @@
   /**
   * 
   */
-  class Settings
+  class Settings 
   {
     
     protected static $host = 'localhost';

@@ -41,16 +41,20 @@
 	*/
 	class Response
 	{
+
 		public static function send($object) {
+
+			header("Access-Control-Allow-Origin: *");
+			header("Access-Control-Allow-Methods: *");
+			header("Content-Type: application/json");
+
 			if(gettype($object) == 'object' && get_class($object) == "Exception") {
 				$response = ResponseError::get($object->getMessage()) ;
 			} else {
 				$response = ResponseSuccess::get($object);
 			}	
 
-			header("Access-Control-Allow-Orgin: *");
-			header("Access-Control-Allow-Methods: *");
-			header("Content-Type: application/json");
+			
 
 			echo json_encode($response);
 		}
