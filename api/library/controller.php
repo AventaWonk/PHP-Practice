@@ -1,9 +1,0 @@
-<?php
-	
-	/**
-	* Controller
-	*/
-	class Controller
-	{
-		
-	}

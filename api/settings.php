@@ -12,7 +12,7 @@
     protected static $password = '';
     protected static $charset = 'utf8';
     protected static $opt = [
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+      \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
     ];
 
     public static function get() {

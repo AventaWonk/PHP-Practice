@@ -1,5 +1,6 @@
 <?php
-  include 'library/router.php';
-  include 'settings.php'; 
-
-  Router::start();
+  include 'lib/router.php';
+  include 'settings.php';
+  
+  general\Router::start(general\Router::DENY_PUBLIC_ACCESS);
+  

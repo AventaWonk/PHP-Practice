@@ -1,5 +1,8 @@
 <?php
-	include './library/model.php';
+namespace app;
+
+include './lib/model.php';
+use general\Model;
 
 	/**
 	* Message model
