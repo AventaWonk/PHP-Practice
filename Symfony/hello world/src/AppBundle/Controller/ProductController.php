@@ -52,4 +52,18 @@ class ProductController extends Controller
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/delete/{id}", name="delete")
+     */
+    public function deleteProduct($id, EntityManagerInterface $em)
+    {
+        $product = $em->getRepository('AppBundle:Product')->findOneById($id);
+        $em->remove($product);
+        $em->flush();
+
+        return $this->redirectToRoute('index');
+    }
+
+
 }
