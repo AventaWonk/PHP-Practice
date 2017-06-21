@@ -65,5 +65,31 @@ class ProductController extends Controller
         return $this->redirectToRoute('index');
     }
 
+    /**
+     * @Route("/update/{id}", name="update")
+     */
+    public function updateProduct($id, Request $request, EntityManagerInterface $em)
+    {
+      $product = $em->getRepository('AppBundle:Product')->findOneById($id);
+      $form = $this->createFormBuilder($product)
+          ->add('name', TextType::class)
+          ->add('price', NumberType::class)
+          ->add('description', TextType::class)
+          ->add('save', SubmitType::class, ['label' => 'Add'])
+          ->getForm();
+      $form->handleRequest($request);
+
+      if ($form->isSubmitted() && $form->isValid()) {
+        $product = $form->getData();
+        $em->persist($product);
+        $em->flush();
+        return $this->redirectToRoute('index');
+      }
+
+      return $this->render('product/create.html.twig', [
+          'form' => $form->createView(),
+      ]);
+    }
+
 
 }
