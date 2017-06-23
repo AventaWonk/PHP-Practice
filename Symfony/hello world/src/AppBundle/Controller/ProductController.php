@@ -28,7 +28,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/create", name="create")
+     * @Route("/admin/create", name="create")
      */
     public function addProduct(Request $request, EntityManagerInterface $em)
     {
@@ -54,7 +54,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/delete/{id}", name="delete")
+     * @Route("/admin/delete/{id}", name="delete")
      */
     public function deleteProduct($id, EntityManagerInterface $em)
     {
@@ -66,7 +66,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/update/{id}", name="update")
+     * @Route("/admin/update/{id}", name="update")
      */
     public function updateProduct($id, Request $request, EntityManagerInterface $em)
     {
@@ -75,7 +75,7 @@ class ProductController extends Controller
           ->add('name', TextType::class)
           ->add('price', NumberType::class)
           ->add('description', TextType::class)
-          ->add('save', SubmitType::class, ['label' => 'Add'])
+          ->add('save', SubmitType::class, ['label' => 'Save'])
           ->getForm();
       $form->handleRequest($request);
 
