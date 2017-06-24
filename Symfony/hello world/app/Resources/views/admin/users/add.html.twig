@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Add user{% endblock %}
+
+{% block menu %}
+  {% include 'admin/menu.html.twig'%}
+{% endblock %}
+
 {% block body %}
   {{ form_start(form) }}
     {{ form_widget(form) }}

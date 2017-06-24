@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symfony test{% endblock %}
+
+{% block menu %}
+  {% include 'menu.html.twig'%}
+{% endblock %}
+
+{% block body %}
+  <div class="row">
+    <p class="lead text-center">Products</p>
+  </div>
+  <div class="row">
+    {% for product in products %}
+      <ul>
+        <li>
+          <span>
+            {{product.name}}
+          </span>
+          <span>
+            {{product.price}}
+          </span>
+        </li>
+      </ul>
+    {% endfor %}
+  </div>
+{% endblock %}

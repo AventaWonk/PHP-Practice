@@ -15,20 +15,20 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class ProductController extends Controller
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/admin/products/", name="index")
      */
     public function indexAction(EntityManagerInterface $em)
     {
       $products = $em->getRepository('AppBundle:Product')
         ->findAll();
 
-      return $this->render('/product/readAll.html.twig', [
+      return $this->render('admin/products/index.html.twig', [
         'products' => $products,
       ]);
     }
 
     /**
-     * @Route("/admin/create", name="create")
+     * @Route("/admin/products/create", name="create")
      */
     public function addProduct(Request $request, EntityManagerInterface $em)
     {
@@ -48,13 +48,13 @@ class ProductController extends Controller
           return $this->redirectToRoute('index');
         }
 
-        return $this->render('product/create.html.twig', [
+        return $this->render('admin/products/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/admin/delete/{id}", name="delete")
+     * @Route("/admin/products/delete/{id}", name="delete")
      */
     public function deleteProduct($id, EntityManagerInterface $em)
     {
@@ -66,7 +66,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/admin/update/{id}", name="update")
+     * @Route("/admin/products/update/{id}", name="update")
      */
     public function updateProduct($id, Request $request, EntityManagerInterface $em)
     {
@@ -86,7 +86,7 @@ class ProductController extends Controller
         return $this->redirectToRoute('index');
       }
 
-      return $this->render('product/create.html.twig', [
+      return $this->render('admin/products/add.html.twig', [
           'form' => $form->createView(),
       ]);
     }

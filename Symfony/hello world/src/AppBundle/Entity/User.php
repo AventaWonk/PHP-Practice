@@ -39,6 +39,12 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @ORM\Column(type="string", length=64)
+     */
+    private $roles;
+
+
     public function __construct()
     {
         $this->isActive = true;
@@ -65,7 +71,10 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+      if ($this->roles) {
+        return [$this->roles];
+      }
+      return ['ROLE_ADMIN'];
     }
 
     public function eraseCredentials()
@@ -116,7 +125,21 @@ class User implements UserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
-    
+
+        return $this;
+    }
+
+    /**
+     * Set roles
+     *
+     * @param string $role
+     *
+     * @return User
+     */
+    public function setRoles($role)
+    {
+        $this->roles = $role;
+
         return $this;
     }
 
@@ -130,7 +153,7 @@ class User implements UserInterface, \Serializable
     public function setPassword($password)
     {
         $this->password = $password;
-    
+
         return $this;
     }
 
@@ -144,7 +167,7 @@ class User implements UserInterface, \Serializable
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
@@ -168,7 +191,7 @@ class User implements UserInterface, \Serializable
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
