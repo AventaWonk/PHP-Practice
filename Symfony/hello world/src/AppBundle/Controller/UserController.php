@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\Role;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserController extends Controller
 {
@@ -33,12 +35,25 @@ class UserController extends Controller
     public function addUserAction(Request $request, EntityManagerInterface $em)
     {
         $product = new User();
+        $roles = $em->getRepository('AppBundle:Role')
+          ->findAll();
+
         $form = $this->createFormBuilder($product)
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
             ->add('password', TextType::class)
+            ->add('roles', ChoiceType::class, [
+                'choices' => $roles,
+                'choice_label' => function($role, $key, $index) {
+                    return $role->getName();
+                },
+                'choice_value' => function($role, $key, $index) {
+                    return  $role->getId();
+                },
+            ])
             ->add('save', SubmitType::class, ['label' => 'Add'])
             ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -70,12 +85,25 @@ class UserController extends Controller
      */
     public function updateUserAction($id, Request $request, EntityManagerInterface $em)
     {
-      $user = $em->getRepository('AppBundle:User')->findOneById($id);
+      $user = $em->getRepository('AppBundle:User')
+        ->findOneById($id);
+      $roles = $em->getRepository('AppBundle:Role')
+        ->findAll();
+
       $user->setPassword('');
       $form = $this->createFormBuilder($user)
           ->add('username', TextType::class)
           ->add('email', EmailType::class)
           ->add('password', TextType::class)
+          ->add('roles', ChoiceType::class, [
+              'choices' => $roles,
+              'choice_label' => function($role, $key, $index) {
+                  return $role->getName();
+              },
+              'choice_attr' => function($role, $key, $index) {
+                  return ['class' => $role->getId()];
+              }
+          ])
           ->add('save', SubmitType::class, ['label' => 'Save'])
           ->getForm();
       $form->handleRequest($request);

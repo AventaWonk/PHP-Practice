@@ -40,7 +40,7 @@ class User implements UserInterface, \Serializable
     private $isActive;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="integer")
      */
     private $roles;
 
@@ -136,9 +136,9 @@ class User implements UserInterface, \Serializable
      *
      * @return User
      */
-    public function setRoles($role)
+    public function setRoles($roles)
     {
-        $this->roles = $role;
+        $this->roles = $roles;
 
         return $this;
     }

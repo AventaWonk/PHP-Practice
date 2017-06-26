@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 
-class HomeController extends Controller
+class PageController extends Controller
 {
     /**
      * @Route("/", name="home_index")
